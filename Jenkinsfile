@@ -16,13 +16,29 @@ pipeline {
         stage('Set up .NET Core') {
             steps {
                 sh '''
+                set -e
+                echo "Updating package lists"
                 sudo apt-get update
+
+                echo "Installing wget"
                 sudo apt-get install -y wget
+
+                echo "Downloading Microsoft package"
                 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+
+                echo "Installing Microsoft package"
                 sudo dpkg -i packages-microsoft-prod.deb
+
+                echo "Updating package lists again"
                 sudo apt-get update
+
+                echo "Installing apt-transport-https"
                 sudo apt-get install -y apt-transport-https
+
+                echo "Updating package lists one more time"
                 sudo apt-get update
+
+                echo "Installing .NET SDK 6.0"
                 sudo apt-get install -y dotnet-sdk-6.0
                 '''
             }
@@ -31,7 +47,11 @@ pipeline {
         stage('Install Chrome') {
             steps {
                 sh '''
+                set -e
+                echo "Updating package lists"
                 sudo apt-get update
+
+                echo "Installing Google Chrome"
                 sudo apt-get install -y google-chrome-stable
                 '''
             }
