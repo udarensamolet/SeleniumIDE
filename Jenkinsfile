@@ -2,7 +2,10 @@ pipeline {
     agent any
 
     environment {
-        CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe'
+        CHROME_VERSION = '91.0.4472.101'
+        CHROMEDRIVER_VERSION = '91.0.4472.101'
+        CHROME_INSTALL_PATH = 'C:\\Program Files\\Google\\Chrome\\Application'
+        CHROMEDRIVER_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe'
     }
 
     stages {
@@ -34,8 +37,8 @@ pipeline {
         stage('Install Specific Version of Chrome') {
             steps {
                 bat '''
-                echo Installing Google Chrome version 91.0.4472.101
-                choco install googlechrome --version=91.0.4472.101 -y --allow-downgrade --ignore-checksums
+                echo Installing Google Chrome version %CHROME_VERSION%
+                choco install googlechrome --version=%CHROME_VERSION% -y --allow-downgrade --ignore-checksums
                 '''
             }
         }
@@ -43,10 +46,19 @@ pipeline {
         stage('Download and Install ChromeDriver') {
             steps {
                 bat '''
-                echo Downloading ChromeDriver version 91.0.4472.101
-                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
+                echo Downloading ChromeDriver version %CHROMEDRIVER_VERSION%
+                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROMEDRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
                 powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
-                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe' -Force"
+                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination '%CHROMEDRIVER_PATH%' -Force"
+                '''
+            }
+        }
+
+        stage('Verify ChromeDriver Version') {
+            steps {
+                bat '''
+                echo Verifying ChromeDriver version
+                %CHROMEDRIVER_PATH% --version
                 '''
             }
         }
