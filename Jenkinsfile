@@ -26,7 +26,7 @@ pipeline {
             steps {
                 bat '''
                 echo Installing Google Chrome version 91.0.4472.101
-                choco install googlechrome --version=91.0.4472.101 -y
+                choco install googlechrome --version=91.0.4472.101 -y --allow-downgrade
                 '''
             }
         }
