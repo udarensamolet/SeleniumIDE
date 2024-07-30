@@ -33,27 +33,30 @@ pipeline {
 
         stage('Restore dependencies') {
             steps {
-                bat 'dotnet restore HouseRentingSystem.sln'
+                // Restore dependencies using the solution file
+                bat 'dotnet restore SeleniumIde.sln'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build HouseRentingSystem.sln --configuration Release'
+                // Build the project using the solution file
+                bat 'dotnet build SeleniumIde.sln --configuration Release'
             }
         }
 
         stage('Run tests') {
             steps {
-                bat 'dotnet test HouseRentingSystem.Tests/HouseRentingSystem.Tests.csproj'
+                // Run tests using the solution file
+                bat 'dotnet test SeleniumIde.sln --logger "trx;LogFileName=TestResults.trx"'
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: '**/TestResults/*.xml', allowEmptyArchive: true
-            junit '**/TestResults/*.xml'
+            archiveArtifacts artifacts: '**/TestResults/*.trx', allowEmptyArchive: true
+            junit '**/TestResults/*.trx'
         }
     }
 }
