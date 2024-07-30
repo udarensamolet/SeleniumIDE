@@ -8,15 +8,23 @@ pipeline {
     stages {
         stage('Checkout code') {
             steps {
-                // Checkout code from GitHub
-                git 'https://github.com/udarensamolet/SeleniumIDE.git'
+                // Checkout code from GitHub and specify the branch
+                git branch: 'main', url: 'https://github.com/udarensamolet/SeleniumIDE.git'
             }
         }
 
         stage('Set up .NET Core') {
             steps {
-                sh 'sudo apt-get update'
-                sh 'sudo apt-get install -y dotnet-sdk-6.0'
+                sh '''
+                sudo apt-get update
+                sudo apt-get install -y wget
+                wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                sudo dpkg -i packages-microsoft-prod.deb
+                sudo apt-get update
+                sudo apt-get install -y apt-transport-https
+                sudo apt-get update
+                sudo apt-get install -y dotnet-sdk-6.0
+                '''
             }
         }
 
