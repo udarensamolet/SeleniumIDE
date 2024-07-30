@@ -31,7 +31,7 @@ public class TC01IfUserIsInvalidTryAgainTest
         // Specify the path to the ChromeDriver executable
         var service = ChromeDriverService.CreateDefaultService(@"C:\Program Files\Google\Chrome\Application\", "chromedriver.exe");
 
-        driver = new ChromeDriver(options, service);
+        driver = new ChromeDriver(service, options);
         js = (IJavaScriptExecutor)driver;
         vars = new Dictionary<string, object>();
     }
