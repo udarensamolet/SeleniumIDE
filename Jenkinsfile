@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CHROMEWEBDRIVER = '/usr/bin/google-chrome'
+        CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     }
 
     stages {
@@ -15,63 +15,37 @@ pipeline {
 
         stage('Set up .NET Core') {
             steps {
-                sh '''
-                set -e
-                echo "Updating package lists"
-                sudo apt-get update
-
-                echo "Installing wget"
-                sudo apt-get install -y wget
-
-                echo "Downloading Microsoft package"
-                wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-
-                echo "Installing Microsoft package"
-                sudo dpkg -i packages-microsoft-prod.deb
-
-                echo "Updating package lists again"
-                sudo apt-get update
-
-                echo "Installing apt-transport-https"
-                sudo apt-get install -y apt-transport-https
-
-                echo "Updating package lists one more time"
-                sudo apt-get update
-
-                echo "Installing .NET SDK 6.0"
-                sudo apt-get install -y dotnet-sdk-6.0
+                bat '''
+                echo Installing .NET SDK 6.0
+                choco install dotnet-sdk -y --version=6.0.100
                 '''
             }
         }
 
         stage('Install Chrome') {
             steps {
-                sh '''
-                set -e
-                echo "Updating package lists"
-                sudo apt-get update
-
-                echo "Installing Google Chrome"
-                sudo apt-get install -y google-chrome-stable
+                bat '''
+                echo Installing Google Chrome
+                choco install googlechrome -y
                 '''
             }
         }
 
-        stage('Install dependencies') {
+        stage('Restore dependencies') {
             steps {
-                sh 'dotnet restore'
+                bat 'dotnet restore HouseRentingSystem.sln'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'dotnet build --no-restore'
+                bat 'dotnet build HouseRentingSystem.sln --configuration Release'
             }
         }
 
         stage('Run tests') {
             steps {
-                sh 'dotnet test --verbosity normal'
+                bat 'dotnet test HouseRentingSystem.Tests/HouseRentingSystem.Tests.csproj'
             }
         }
     }
