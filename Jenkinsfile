@@ -5,7 +5,7 @@ pipeline {
         CHROME_VERSION = '91.0.4472.101'
         CHROMEDRIVER_VERSION = '91.0.4472.101'
         CHROME_INSTALL_PATH = 'C:\\Program Files\\Google\\Chrome\\Application'
-        CHROMEDRIVER_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe'
+        CHROMEDRIVER_PATH = '"C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe"'
     }
 
     stages {
@@ -49,7 +49,7 @@ pipeline {
                 echo Downloading ChromeDriver version %CHROMEDRIVER_VERSION%
                 powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROMEDRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
                 powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
-                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination '%CHROMEDRIVER_PATH%' -Force"
+                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination %CHROMEDRIVER_PATH% -Force"
                 '''
             }
         }
