@@ -29,9 +29,9 @@ public class TC01IfUserIsInvalidTryAgainTest
         options.AddArguments("window-size=1920x1080");
 
         // Specify the path to the ChromeDriver executable
-        var service = ChromeDriverService.CreateDefaultService(@"C:\Program Files\Google\Chrome\Application\", "chromedriver.exe");
+        //var service = ChromeDriverService.CreateDefaultService(@"C:\Program Files\Google\Chrome\Application\", "chromedriver.exe");
 
-        driver = new ChromeDriver(service, options);
+        driver = new ChromeDriver(options);
         js = (IJavaScriptExecutor)driver;
         vars = new Dictionary<string, object>();
     }
