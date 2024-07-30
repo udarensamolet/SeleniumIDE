@@ -5,7 +5,7 @@ pipeline {
         CHROME_VERSION = '91.0.4472.101'
         CHROMEDRIVER_VERSION = '91.0.4472.101'
         CHROME_INSTALL_PATH = 'C:\\Program Files\\Google\\Chrome\\Application'
-        CHROMEDRIVER_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe'
+        CHROMEDRIVER_PATH = '"C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe"'
     }
 
     stages {
@@ -43,6 +43,15 @@ pipeline {
             }
         }
 
+        stage('Verify Chrome Version') {
+            steps {
+                bat '''
+                echo Verifying Chrome version
+                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version
+                '''
+            }
+        }
+
         stage('Download and Install ChromeDriver') {
             steps {
                 bat '''
@@ -58,7 +67,7 @@ pipeline {
             steps {
                 bat '''
                 echo Verifying ChromeDriver version
-                "%CHROMEDRIVER_PATH%" --version
+                %CHROMEDRIVER_PATH% --version
                 '''
             }
         }
