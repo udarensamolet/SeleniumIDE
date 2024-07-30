@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+        CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe'
     }
 
     stages {
@@ -22,23 +22,20 @@ pipeline {
             }
         }
 
-        stage('Install Chrome') {
+        stage('Install Specific Version of Chrome') {
             steps {
                 bat '''
-                echo Installing Google Chrome
-                choco install googlechrome -y
+                echo Installing Google Chrome version 91.0.4472.101
+                choco install googlechrome --version=91.0.4472.101 -y
                 '''
             }
         }
 
-        stage('Download ChromeDriver') {
+        stage('Download and Install ChromeDriver') {
             steps {
                 bat '''
-                echo Finding the latest ChromeDriver version compatible with Chrome
-                powershell -command "(Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/LATEST_RELEASE -UseBasicParsing).Content" > latest_version.txt
-                set /p CHROME_DRIVER_VERSION=<latest_version.txt
-                echo Downloading ChromeDriver version %CHROME_DRIVER_VERSION%
-                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_DRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
+                echo Downloading ChromeDriver version 91.0.4472.101
+                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
                 powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
                 powershell -command "Move-Item -Path .\\chromedriver.exe -Destination 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe' -Force"
                 '''
