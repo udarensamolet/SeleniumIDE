@@ -47,7 +47,7 @@ pipeline {
             steps {
                 bat '''
                 echo Verifying Chrome version
-                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version
+                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version --disable-gpu
                 '''
             }
         }
