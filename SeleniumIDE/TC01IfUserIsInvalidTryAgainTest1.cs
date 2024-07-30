@@ -28,38 +28,6 @@ public class TC01IfUserIsInvalidTryAgainTest
         options.AddArguments("disable-gpu");
         options.AddArguments("window-size=1920x1080");
 
-        Yes, you can explicitly specify the path to the ChromeDriver to ensure that the correct version is used. In your test setup code, you can specify the exact path to the ChromeDriver executable that you have downloaded and installed.
-
-Here’s how you can modify your test setup in C# to explicitly set the ChromeDriver path:
-C# Test Setup
-
-Make sure your C# test setup specifies the path to the ChromeDriver executable. Here's an example modification:
-
-csharp
-
-using System;
-using System.Collections.Generic;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using NUnit.Framework;
-
-[TestFixture]
-public class TC01IfUserIsInvalidTryAgainTest
-{
-    private IWebDriver driver;
-    public IDictionary<string, object> vars { get; private set; }
-    private IJavaScriptExecutor js;
-
-    [SetUp]
-    public void SetUp()
-    {
-        var options = new ChromeOptions();
-        options.AddArguments("headless");
-        options.AddArguments("no-sandbox");
-        options.AddArguments("disable-dev-shm-usage");
-        options.AddArguments("disable-gpu");
-        options.AddArguments("window-size=1920x1080");
-
         // Specify the path to the ChromeDriver executable
         var service = ChromeDriverService.CreateDefaultService(@"C:\Program Files\Google\Chrome\Application\", "chromedriver.exe");
 
