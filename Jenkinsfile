@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-        CHROME_VERSION = '127.0.6533.73' // Your Chrome version
     }
 
     stages {
@@ -35,10 +34,13 @@ pipeline {
         stage('Download ChromeDriver') {
             steps {
                 bat '''
-                echo Downloading ChromeDriver for Chrome version %CHROME_VERSION%
-                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip"
-                powershell -command "Expand-Archive chromedriver.zip -DestinationPath ."
-                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe -Force"
+                echo Finding the latest ChromeDriver version compatible with Chrome
+                powershell -command "(Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/LATEST_RELEASE).Content" > latest_version.txt
+                set /p CHROME_DRIVER_VERSION=<latest_version.txt
+                echo Downloading ChromeDriver version %CHROME_DRIVER_VERSION%
+                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_DRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip"
+                powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
+                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe' -Force"
                 '''
             }
         }
