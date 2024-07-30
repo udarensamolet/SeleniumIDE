@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         CHROMEWEBDRIVER = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+        CHROME_VERSION = '127.0.6533.73' // Your Chrome version
     }
 
     stages {
@@ -27,6 +28,17 @@ pipeline {
                 bat '''
                 echo Installing Google Chrome
                 choco install googlechrome -y
+                '''
+            }
+        }
+
+        stage('Download ChromeDriver') {
+            steps {
+                bat '''
+                echo Downloading ChromeDriver for Chrome version %CHROME_VERSION%
+                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip"
+                powershell -command "Expand-Archive chromedriver.zip -DestinationPath ."
+                powershell -command "Move-Item -Path .\\chromedriver.exe -Destination C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe -Force"
                 '''
             }
         }
