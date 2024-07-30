@@ -43,15 +43,6 @@ pipeline {
             }
         }
 
-        stage('Verify Chrome Version') {
-            steps {
-                bat '''
-                echo Verifying Chrome version
-                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version --disable-gpu
-                '''
-            }
-        }
-
         stage('Download and Install ChromeDriver') {
             steps {
                 bat '''
@@ -59,15 +50,6 @@ pipeline {
                 powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROMEDRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
                 powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
                 powershell -command "Move-Item -Path .\\chromedriver.exe -Destination '%CHROME_INSTALL_PATH%\\chromedriver.exe' -Force"
-                '''
-            }
-        }
-
-        stage('Verify ChromeDriver Version') {
-            steps {
-                bat '''
-                echo Verifying ChromeDriver version
-                %CHROMEDRIVER_PATH% --version
                 '''
             }
         }
