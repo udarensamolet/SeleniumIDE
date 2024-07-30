@@ -35,10 +35,10 @@ pipeline {
             steps {
                 bat '''
                 echo Finding the latest ChromeDriver version compatible with Chrome
-                powershell -command "(Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/LATEST_RELEASE).Content" > latest_version.txt
+                powershell -command "(Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/LATEST_RELEASE -UseBasicParsing).Content" > latest_version.txt
                 set /p CHROME_DRIVER_VERSION=<latest_version.txt
                 echo Downloading ChromeDriver version %CHROME_DRIVER_VERSION%
-                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_DRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip"
+                powershell -command "Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/%CHROME_DRIVER_VERSION%/chromedriver_win32.zip -OutFile chromedriver.zip -UseBasicParsing"
                 powershell -command "Expand-Archive -Path chromedriver.zip -DestinationPath ."
                 powershell -command "Move-Item -Path .\\chromedriver.exe -Destination 'C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe' -Force"
                 '''
